@@ -23,7 +23,7 @@ func InitDB() {
 		Passwd:               os.Getenv("DB_PASSWORD"),
 		Net:                  "tcp",
 		Addr:                 os.Getenv("DB_HOST"),
-		DBName:               "gmh-db",
+		DBName:               os.Getenv("DB_NAME"),
 		AllowNativePasswords: true,
 	}
 

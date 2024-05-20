@@ -1,11 +1,18 @@
 package main
 
 import (
+	"os"
+
+	router "github.com/c3k4ah/gmh-api/api/v1"
 	"github.com/c3k4ah/gmh-api/internal/configs"
-	"github.com/c3k4ah/gmh-api/internal/services"
 )
 
 func main() {
+
 	configs.SetupDatabase()
-	services.GetAppartement(3)
+
+	grouter := router.SetupRouter()
+
+	grouter.Run(":" + os.Getenv("PORT"))
+
 }

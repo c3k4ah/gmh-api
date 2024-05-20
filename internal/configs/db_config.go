@@ -1,41 +1,27 @@
 package configs
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
-	"github.com/go-sql-driver/mysql"
+	// "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-var db *sql.DB
+var Database *gorm.DB
 
-func InitDB() {
+func DBConfig() mysql.Config {
 	loadError := godotenv.Load("../../.env")
 	if loadError != nil {
 		log.Fatalf("Error .env file: %s", loadError)
 	}
 
 	cfg := mysql.Config{
-		User:                 os.Getenv("DB_USERNAME"),
-		Passwd:               os.Getenv("DB_PASSWORD"),
-		Net:                  "tcp",
-		Addr:                 os.Getenv("DB_HOST"),
-		DBName:               os.Getenv("DB_NAME"),
-		AllowNativePasswords: true,
+		DSN: os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ")/" + os.Getenv("DB_NAME") + "?charset=utf8&parseTime=True&loc=Local",
 	}
 
-	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
+	return cfg
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
 }

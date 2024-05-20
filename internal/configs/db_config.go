@@ -4,7 +4,8 @@ import (
 	"log"
 	"os"
 
-	// "github.com/go-sql-driver/mysql"
+	"github.com/c3k4ah/gmh-api/internal/models"
+
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,4 +25,16 @@ func DBConfig() mysql.Config {
 
 	return cfg
 
+}
+
+func SetupDatabase() {
+	var cfg mysql.Config = DBConfig()
+	var err error
+
+	Database, err = gorm.Open(mysql.Open(cfg.DSN), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	Database.AutoMigrate(models.Appartement{}, models.Localisation{})
 }

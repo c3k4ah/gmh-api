@@ -14,7 +14,7 @@ import (
 var Database *gorm.DB
 
 func DBConfig() mysql.Config {
-	loadError := godotenv.Load("../../.env")
+	loadError := godotenv.Load(".env")
 	if loadError != nil {
 		log.Fatalf("Error .env file: %s", loadError)
 	}

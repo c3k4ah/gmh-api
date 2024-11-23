@@ -1,0 +1,207 @@
+definitions:
+  models.Appartement:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      localisation:
+        $ref: '#/definitions/models.Localisation'
+      nombre_chambre:
+        type: string
+      prix_loyer:
+        type: string
+      titre:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Localisation:
+    properties:
+      adresse:
+        type: string
+      detail_adresse:
+        type: string
+      latitude:
+        type: string
+      localisation_id:
+        description: gorm.Model
+        type: integer
+      longitude:
+        type: string
+      ville:
+        type: string
+    type: object
+  services.AppartementResponse:
+    properties:
+      appartement:
+        $ref: '#/definitions/models.Appartement'
+    type: object
+  services.AppartementsResponse:
+    properties:
+      appartements:
+        items:
+          $ref: '#/definitions/models.Appartement'
+        type: array
+    type: object
+  services.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  services.SuccessMessage:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server for GMH API.
+  title: GMH API
+  version: "1"
+paths:
+  /appartements:
+    get:
+      description: Récupère la liste de tous les appartements disponibles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.AppartementsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Récupérer tous les appartements
+      tags:
+      - appartements
+    post:
+      consumes:
+      - application/json
+      description: Crée un appartement avec les informations fournies dans le corps
+        de la requête
+      parameters:
+      - description: Appartement à créer
+        in: body
+        name: appartement
+        required: true
+        schema:
+          $ref: '#/definitions/models.Appartement'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.AppartementResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Créer un nouvel appartement
+      tags:
+      - appartements
+  /appartements/{id}:
+    delete:
+      description: Supprime un appartement en utilisant son ID
+      parameters:
+      - description: ID de l'appartement
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.SuccessMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Supprimer un appartement
+      tags:
+      - appartements
+    get:
+      description: Récupère les détails d'un appartement spécifique en utilisant son
+        ID
+      parameters:
+      - description: ID de l'appartement
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.AppartementResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Récupérer un appartement par ID
+      tags:
+      - appartements
+    put:
+      consumes:
+      - application/json
+      description: Met à jour les informations d'un appartement existant en utilisant
+        son ID
+      parameters:
+      - description: ID de l'appartement
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Données de l'appartement à mettre à jour
+        in: body
+        name: appartement
+        required: true
+        schema:
+          $ref: '#/definitions/models.Appartement'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.AppartementResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Mettre à jour un appartement existant
+      tags:
+      - appartements
+swagger: "2.0"
